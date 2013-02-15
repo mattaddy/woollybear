@@ -1,2 +1,2 @@
 # woollybear
-A (very) primitive fuzzer.
+A first stab at a fuzzer.
