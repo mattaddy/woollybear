@@ -7,6 +7,8 @@ module WoollyBear
     attr_accessor :start_url, :base_url, :current_page, :agent, :config,
                   :anchors, :forms, :cookies, :sensitive_data, :hidden_pages
 
+    DATA_FOLDER = "./data"
+
     def initialize(url)
       @agent = Mechanize.new
       @config = WoollyBear::Configuration
@@ -101,7 +103,7 @@ module WoollyBear
     def sensitive_data_array
       return nil unless gather_sensitive_data?
       line_array = []
-      File.open(@config.get(:sensitive_data)).each_line { |line| line_array.push(line.chomp) }
+      File.open("#{DATA_FOLDER}/#{@config.get(:sensitive_data)}").each_line { |line| line_array.push(line.chomp) }
       line_array
     end
   end
