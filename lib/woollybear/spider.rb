@@ -84,30 +84,7 @@ module WoollyBear
         end
       end
     end
-
-    def print_results
-      puts "Links: found #{self.anchors.size} links.."
-      puts "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-      self.anchors.each { |a| puts a.to_s }
-
-      puts "\nForms: found #{self.forms.size} forms containing #{self.form_fields.size} total fields.."
-      puts "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-
-      puts "\nCookies: #{self.cookies.size} cookies set.."
-      puts "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-      self.cookies.each { |n, v| puts "#{n}: #{v}" }
-
-      puts "\nPage guesses: found #{self.hidden_pages.size} unlinked pages.."
-      puts "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-      self.hidden_pages.each { |p| puts p.uri }
-
-      if @config.get(:sensitive_data)
-        puts "\nSensitive data: found #{self.sensitive_data.size} occurrences of the supplied sensitive data list.."
-        puts "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
-        self.sensitive_data.each { |w, p| puts "#{w} on #{p}" }
-      end
-    end
-
+    
   private
 
     def authenticate
