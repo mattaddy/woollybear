@@ -7,8 +7,11 @@ def WoollyBear.fuzz(url, &block)
   WoollyBear::Configuration.set(&block) if block_given?
 
   spider = WoollyBear::Spider.new(url)
+  
   spider.crawl
   spider.guess
+
+  spider.print_results
 
   # spider.anchors.each { |l| puts l.to_s }
   # spider.cookies.each { |n, v| puts "#{n}: #{v}" }

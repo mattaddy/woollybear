@@ -9,6 +9,13 @@ module WoollyBear
 
     DATA_FOLDER = "./data"
 
+    PAGE_GUESSES = [
+      'admin.php', 'admin', 'login.php', 'login', 'profile.php', 'profile',
+      'config.php', 'config', 'configuration.php', 'configuration',
+      'administrator.php', 'administrator', 'about.php', 'about', 'help.php',
+      'help', 'staff.php', 'staff'
+    ]
+
     def initialize(url)
       @agent = Mechanize.new
       @config = WoollyBear::Configuration
@@ -61,14 +68,43 @@ module WoollyBear
       end
     end
 
+    def form_fields
+      fieldss = 0
+      self.forms.each { |f| fieldss += f.fields.size }
+      fieldss
+    end
+
     def guess
       @hidden_pages = []
-      ['login.php', 'help.html'].each do |page|
+      PAGE_GUESSES.each do |page|
         begin
           page = @agent.get(page)
           @hidden_pages.push(page)
         rescue
         end
+      end
+    end
+
+    def print_results
+      puts "Links: found #{self.anchors.size} links.."
+      puts "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+      self.anchors.each { |a| puts a.to_s }
+
+      puts "\nForms: found #{self.forms.size} forms containing #{self.form_fields.size} total fields.."
+      puts "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+
+      puts "\nCookies: #{self.cookies.size} cookies set.."
+      puts "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+      self.cookies.each { |n, v| puts "#{n}: #{v}" }
+
+      puts "\nPage guesses: found #{self.hidden_pages.size} unlinked pages.."
+      puts "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+      self.hidden_pages.each { |p| puts p.uri }
+
+      if @config.get(:sensitive_data)
+        puts "\nSensitive data: found #{self.sensitive_data.size} occurrences of the supplied sensitive data list.."
+        puts "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+        self.sensitive_data.each { |w, p| puts "#{w} on #{p}" }
       end
     end
 
@@ -106,5 +142,6 @@ module WoollyBear
       File.open("#{DATA_FOLDER}/#{@config.get(:sensitive_data)}").each_line { |line| line_array.push(line.chomp) }
       line_array
     end
+
   end
 end
